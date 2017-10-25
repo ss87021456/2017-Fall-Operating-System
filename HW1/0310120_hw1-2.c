@@ -66,7 +66,7 @@ int main() {
     gettimeofday(&end, 0);
     sec = end.tv_sec - start.tv_sec;
     usec = end.tv_usec - start.tv_usec;
-    printf("1-process, checksum = %d\n",sum);
+    printf("1-process, checksum = %u\n",sum);
     printf("elapsed %f  s\n", sec + (usec/1000000.0));
 
     for (int i = 0; i < n*n ; ++i){
@@ -78,7 +78,7 @@ int main() {
     gettimeofday(&end, 0);
     sec = end.tv_sec - start.tv_sec;
     usec = end.tv_usec - start.tv_usec;
-    printf("4-process, checksum = %d\n",sum);
+    printf("4-process, checksum = %u\n",sum);
     printf("elapsed %f  s\n", sec + (usec/1000000.0));
 
 
