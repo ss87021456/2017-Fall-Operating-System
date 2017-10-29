@@ -17,8 +17,6 @@ class Process {
 
 int main(){
 
-	float avg_wt=0.0, avg_tat=0.0;
-
     ifstream file("Q3.txt");
     string str;
     int num, count=0, burst_time=0, min;
