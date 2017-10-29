@@ -42,9 +42,6 @@ int find_index(Process* process, int pid, int num)
 
 
 int main(){
-
-	float avg_wt=0.0, avg_tat=0.0;
-
     ifstream file("Q4.txt");
     string str;
     int num, count=0, burst_time=0, min, TIME_Q1, TIME_Q2;
@@ -59,7 +56,6 @@ int main(){
     while(!file.eof()){
 		for(int i=0;i<num;++i)
     	{ 
-            //cout << file.peek() << "\n";
     		file >> str;
             process[i].pid = i;
     		process[i].arrival_time = atoi(str.c_str());
@@ -67,7 +63,6 @@ int main(){
     	}
 		for(int i=0;i<num;++i)
     		{
-                //cout << file.peek() << "\n";
     			file >> str;
     			process[i].burst_time = atoi(str.c_str());
                 process[i].remain_time = atoi(str.c_str());
@@ -102,15 +97,9 @@ int main(){
     }
 
     deque<int> Q1, Q2, Q3;
-    /*for (int i=0;i<num;++i) // put all process into Q1
-    {
-        Q1.push_back(process[i].pid);
-    }*/
 
     // initial condition
     Q1.push_back(process[0].pid);
-    
-    //cout << "hello" << "\n";
 
     int last_time=-1;
     int current = 0;
@@ -158,7 +147,7 @@ int main(){
                 process[index].turnaround_time = time-process[index].arrival_time;
                 // calculate waiting time
                 process[index].waiting_time = process[index].turnaround_time-process[index].burst_time;
-                //printf("P[%d]\t|\t%d\t|\t%d\n",index+1,time-at[index],time-at[index]-bt[index]); 
+
                 wait_time += process[index].waiting_time;
                 turnaround_time += process[index].turnaround_time; 
             }
@@ -192,7 +181,7 @@ int main(){
                 process[index].turnaround_time = time-process[index].arrival_time;
                 // calculate waiting time
                 process[index].waiting_time = process[index].turnaround_time-process[index].burst_time;
-                //printf("P[%d]\t|\t%d\t|\t%d\n",index+1,time-at[index],time-at[index]-bt[index]); 
+
                 wait_time += process[index].waiting_time;
                 turnaround_time += process[index].turnaround_time; 
             }
@@ -226,7 +215,7 @@ int main(){
             process[target].turnaround_time = time-process[target].arrival_time;
             // calculate waiting time
             process[target].waiting_time = process[target].turnaround_time-process[target].burst_time;
-            //printf("P[%d]\t|\t%d\t|\t%d\n",index+1,time-at[index],time-at[index]-bt[index]); 
+
             wait_time += process[target].waiting_time;
             turnaround_time += process[target].turnaround_time;
 
