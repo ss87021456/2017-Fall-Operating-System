@@ -27,6 +27,8 @@ void swap_Process(Process* process, int i, int j)
     swap(process[i].burst_time,process[j].burst_time);
     swap(process[i].arrival_time,process[j].arrival_time);
     swap(process[i].remain_time,process[j].remain_time);
+    swap(process[i].waiting_time,process[j].waiting_time);
+    swap(process[i].turnaround_time,process[j].turnaround_time);
 };
 
 int find_index(Process* process, int pid, int num)
@@ -42,6 +44,9 @@ int find_index(Process* process, int pid, int num)
 
 
 int main(){
+
+	float avg_wt=0.0, avg_tat=0.0;
+
     ifstream file("Q4.txt");
     string str;
     int num, count=0, burst_time=0, min, TIME_Q1, TIME_Q2;
@@ -56,6 +61,7 @@ int main(){
     while(!file.eof()){
 		for(int i=0;i<num;++i)
     	{ 
+            //cout << file.peek() << "\n";
     		file >> str;
             process[i].pid = i;
     		process[i].arrival_time = atoi(str.c_str());
@@ -63,6 +69,7 @@ int main(){
     	}
 		for(int i=0;i<num;++i)
     		{
+                //cout << file.peek() << "\n";
     			file >> str;
     			process[i].burst_time = atoi(str.c_str());
                 process[i].remain_time = atoi(str.c_str());
@@ -96,14 +103,22 @@ int main(){
         }
     }
 
+    //cout << process[0].pid << "\n";
+
     deque<int> Q1, Q2, Q3;
+    /*for (int i=0;i<num;++i) // put all process into Q1
+    {
+        Q1.push_back(process[i].pid);
+    }*/
 
     // initial condition
     Q1.push_back(process[0].pid);
+    
+    //cout << "hello" << "\n";
 
-    int last_time=-1;
+    int last_time=-999;
     int current = 0;
-    for (int time = 0 ; remain != 0 ;)
+    for (int time = process[0].arrival_time ; remain != 0 ;)
     {
         //cout << "time: " << time << "\n";
         for (int i=current+1;i<num;++i)
@@ -147,7 +162,8 @@ int main(){
                 process[index].turnaround_time = time-process[index].arrival_time;
                 // calculate waiting time
                 process[index].waiting_time = process[index].turnaround_time-process[index].burst_time;
-
+                //printf("P[%d]\t|\t%d\t|\t%d\n",index+1,time-at[index],time-at[index]-bt[index]); 
+                //printf("P[%d]\t|\t%d\t|\t%d\n",process[index].pid,time-process[index].arrival_time,time-process[index].arrival_time-process[index].burst_time); 
                 wait_time += process[index].waiting_time;
                 turnaround_time += process[index].turnaround_time; 
             }
@@ -181,7 +197,7 @@ int main(){
                 process[index].turnaround_time = time-process[index].arrival_time;
                 // calculate waiting time
                 process[index].waiting_time = process[index].turnaround_time-process[index].burst_time;
-
+                //printf("P[%d]\t|\t%d\t|\t%d\n",process[index].pid,time-process[index].arrival_time,time-process[index].arrival_time-process[index].burst_time); 
                 wait_time += process[index].waiting_time;
                 turnaround_time += process[index].turnaround_time; 
             }
@@ -194,7 +210,7 @@ int main(){
             int position = 0;
             for (int i = 0; i < Q3.size(); ++i)
             {
-                int idx = find_index(process,i,num);
+                int idx = find_index(process,Q3[i],num);
                 if (process[idx].burst_time < min)
                 {
                     min = process[idx].burst_time;
@@ -215,13 +231,27 @@ int main(){
             process[target].turnaround_time = time-process[target].arrival_time;
             // calculate waiting time
             process[target].waiting_time = process[target].turnaround_time-process[target].burst_time;
-
+            //printf("P[%d]\t|\t%d\t|\t%d\n",index+1,time-at[index],time-at[index]-bt[index]); 
+            //printf("P[%d]\t|\t%d\t|\t%d\n",process[target].pid,time-process[target].arrival_time,time-process[target].arrival_time-process[target].burst_time); 
+            //cout << "target: " << target << "\n"; 
             wait_time += process[target].waiting_time;
             turnaround_time += process[target].turnaround_time;
 
         }
 
     }
+
+    // Sorting According to Process_id
+    for(int i=0;i<num;i++)
+    {
+        for(int j=0;j<num;j++)
+        {
+            if (process[i].pid < process[j].pid)
+                swap_Process(process,i,j);
+        }
+    }
+
+    //cout << process[1].waiting_time << "\n";
 
     cout<<"Process\tWaiting Time\tTurnaround Time";
 
